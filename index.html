@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Drag Items</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div id="container1" class="drag-container">
+        <div class="stack" draggable="true"><img src="https://cdn.dribbble.com/userupload/7657549/file/original-cadaf52ba6e9a5bb027bd9f9b66de5c4.png?compress=1&resize=1504x1128" style="width: 100px; height: 100px;" alt="img" /></div>
+        <div class="stack" draggable="true">Note</div>
+        <div class="stack" draggable="true"><i class="fa fa-car"></i>
+        </div>
+      </div>
+      <div id="container2" class="drag-container"></div>
+    </div>
+    <button id="resetButton">Reset</button>
+
+    <script>
+      // Get the container elements by id
+      const container1 = document.getElementById("container1");
+      const container2 = document.getElementById("container2");
+
+      // Add event listeners to enable dragging and dropping
+      // pick the item-> dragover to dest-> drop to destination
+      container1.addEventListener("dragstart", dragStart);
+      container2.addEventListener("dragover", dragOver);
+      container2.addEventListener("drop", drop);
+
+      // intialize draggedItem to null
+      let draggedItem = null;
+
+      // Display a message in a alert, it will increase code reusability
+      function showMessage(message) {
+        alert(message);
+      }
+
+      //For the dragstart event
+      function dragStart(event) {
+        draggedItem = event.target;
+        event.dataTransfer.effectAllowed = "move";
+        event.dataTransfer.setData("text/plain", event.target.innerHTML);
+        event.target.classList.add("dragging");
+      }
+
+      // For dragover event
+      function dragOver(event) {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move";
+        event.target.style.backgroundColor = '#f2f2f2';
+      }
+
+      //  Handler for the drop event
+      function drop(event) {
+        event.preventDefault();
+        container2.appendChild(draggedItem);
+        event.target.classList.remove("dragging");
+        showMessage("Item dropped successfully!");
+      }
+
+      // Handles reset button click
+      const resetButton = document.getElementById("resetButton");
+      resetButton.addEventListener("click", reset);
+
+      // Reset the containers to their original state
+      function reset() {
+        container1.innerHTML = `
+        <div class="stack" draggable="true"><img src="https://cdn.dribbble.com/userupload/7657549/file/original-cadaf52ba6e9a5bb027bd9f9b66de5c4.png?compress=1&resize=1504x1128" style="width: 100px; height: 100px;" alt="img" /></div>
+        <div class="stack" draggable="true">Note</div>
+        <div class="stack" draggable="true"><i class="fa fa-car"></i>
+</div>
+      `;
+        container2.innerHTML = "";
+        showMessage("Reseting containers");
+      }
+
+      
+    </script>
+  </body>
+</html>
